@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DocumentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiocrController;
+use App\Http\Controllers\Api\SearchApiController;
 use App\Http\Controllers\Api\UserLoginController;
 use App\Http\Controllers\Api\UserPermissionController;
 
@@ -25,3 +26,6 @@ Route::post('/ocr-test', [ApiocrController::class, 'testOcrInput']);
 Route::post('/userpermission',[UserPermissionController::class,'assignRole']);
 Route::post('/userlogin',[UserLoginController::class,'testApiLogin']);
 Route::post('/document_import_api', [DocumentController::class, 'document_import']);
+
+Route::post('/search_api', [SearchApiController::class, 'searchQuery']);
+Route::post('/external/search', [SearchApiController::class, 'searchRequest']);
