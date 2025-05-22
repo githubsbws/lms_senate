@@ -35,6 +35,7 @@ class SearchApiController extends Controller
             $years = $request->input('year');         // เพิ่ม field ได้ตามต้องการ
 
             $dateMeetParse = \Carbon\carbon::parse($dateMeet)->subYears(543)->format('Y-m-d');
+            
             $query = File::where('active','y');
             if($dateMeet)
             {
