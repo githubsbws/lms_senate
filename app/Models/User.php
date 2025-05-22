@@ -16,8 +16,27 @@ class User extends Authenticatable
 
     protected $primaryKey = 'id';
     
-    protected $fillable = ['password','firstname','lastname','id_card','dob','email','employee_type','lastvisit','position','agency','type_user_id','active']; 
+    protected $fillable = ['password','firstname','lastname','id_card','dob','email','employee_type','lastvisit','position','agency','type_user_id','active','name_title','person_id','idcard_token'];
+    
+    protected $hidden = [
+        'password'
+    ];
 
     public $timestamps = false;
+
+    protected $dates = ['dob'];
+
+    public function typeuser()
+    {
+        return $this->belongsTo(Typeuser::class,'type_user_id','id');
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            $user->active = 'y'; 
+        });
+        
+    }
 
 }

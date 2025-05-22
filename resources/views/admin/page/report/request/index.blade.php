@@ -20,61 +20,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($request as $req)
                                         <tr>
-                                            <td class="text-center">1/2567</td>
-                                            <td class="text-center">เขียว ชะอุ่ม</td>
-                                            <td class="">แบบคำขอหนังสือรับรองของที่ปรึกษาผู้ชำนาญการนักวิชาการและเลขานุการประจำคณะกรรมาธิการฯ</td>
+                                            <td class="text-center">{{ $req->number }}</td>
+                                            <td class="text-center">{{ $req->user->firstname }} {{ $req->user->lastname }}</td>
+                                            <td class="">{{ $req->type_detail }}</td>
                                         </tr>
-                                        <tr>
-                                            <td class="text-center">2/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">3/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">4/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">5/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">6/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">7/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">8/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">9/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">10/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">11/2567</td>
-                                            <td class="text-center">สมมติ ตัวอย่าง</td>
-                                            <td class="">แบบคำขอมีบัตรแสดงตนบุคคลในคณะกรรมาธิการฯ</td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -91,7 +43,7 @@
         $('#docsList').DataTable({
             scrollX: true,
             language: {
-                url: '/council/Admin/includes/languageDataTable.json',
+                url: '/includes/languageDataTable.json',
             }
         });
     });

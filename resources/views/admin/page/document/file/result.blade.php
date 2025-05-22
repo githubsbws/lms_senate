@@ -1,4 +1,4 @@
-@extends('admin/layouts/main')
+@extends('admin/layouts/main2')
 @section('content')
 <body id="body">
     <div class="warpper">

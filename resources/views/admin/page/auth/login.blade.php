@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="th">
-
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+        .input-error {
+            border: 1px solid red;
+        }
+    </style>
 @include('admin.layouts.partials.header')
 
 <body class="d-flex flex-column min-vh-100" style=" background: rgb(61,106,215); background: radial-gradient(circle, rgba(61,106,215,1) 50%, rgba(17,51,184,1) 85%);">
@@ -12,6 +20,13 @@
                 </center>
                 <h2 class="text-center fw-semibold mb-3" style="color: #2552C1;">เข้าสู่ระบบ</h2>
                 <p class="fw-normal text-center" style="color: #8A92A6;">ลงชื่อเข้าใช้เพื่อเชื่อมต่อ </p>
+               
+                @if ($errors->has('username'))
+                <div class="error-message">
+                    {{ $errors->first('username') }}
+                </div>
+                @endif
+
                 <form action="{{ route('admin.login') }}" method="POST" enctype="multipart/form-data" class="max-w-sm mx-auto">
                     @csrf
                 <div class="mt-3">
@@ -19,7 +34,6 @@
                         <label class="fw-normal" style="color: #999999;"> ชื่อผู้ใช้ </label>
                         <input type="text" name="username" class="form-control">
                     </div>
-
                     <div class="form-group mb-3">
                         <label class="fw-normal" style="color: #999999;"> รหัสผ่าน </label>
                         <input type="password" name="password" class="form-control">

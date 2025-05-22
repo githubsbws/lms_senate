@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\Approve;
 
 
 class RequestController extends Controller
@@ -16,7 +16,9 @@ class RequestController extends Controller
     {
         if(Auth::check()){
 
-            return view('admin.page.report.request.index');
+            $request = Approve::where('active','y')->get();
+
+            return view('admin.page.report.request.index',compact('request'));
         }
         return view('admin.page.auth.login');
     }

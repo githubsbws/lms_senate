@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use Google\Cloud\DocumentAI\V1\Client\DocumentProcessorServiceClient;
 use Google\Cloud\DocumentAI\V1\ProcessRequest;
 use Google\Cloud\DocumentAI\V1\RawDocument;
+use setasign\Fpdi\Fpdi;
 
 class OCRController extends Controller
 {
     public function upload(Request $request)
     {
         $request->validate([
-            'scan' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4082',
+            'scan' => 'required|file|mimes:jpg,jpeg,png,pdf',
         ]);
 
         // เก็บไฟล์ที่อัปโหลด
@@ -36,19 +37,56 @@ class OCRController extends Controller
         }
 
         $fileExtension = strtolower(pathinfo($imageName, PATHINFO_EXTENSION));
-
-        // ตรวจสอบประเภทไฟล์และประมวลผลข้อความ
-        $text = $this->processDocument($filePath);
         $isPdf = $fileExtension === 'pdf';
+
+        if ($isPdf) {
+            // แยก PDF และรวมข้อความทั้งหมด
+            $splitFiles = $this->splitPdf($filePath, $idFolder);
+            $texts = [];
+
+            foreach ($splitFiles as $chunk) {
+                $texts[] = $this->processDocument($chunk);
+            }
+
+            $text = implode("\n\n", $texts);
+        } else {
+            // ประมวลผลไฟล์ภาพ
+            $text = $this->processDocument($filePath);
+        }
 
         return view('result', compact('text', 'imageName', 'isPdf'));
     }
+    private function splitPdf($filePath, $outputDir, $chunkSize = 15)
+    {
+        $pdf = new Fpdi();
+        $pdf->setSourceFile($filePath);
 
+        $totalPages = $pdf->getNumPages();
+        $chunks = ceil($totalPages / $chunkSize);
+
+        $splitFiles = [];
+
+        for ($i = 0; $i < $chunks; $i++) {
+            $pdf = new Fpdi();
+            for ($j = 0; $j < $chunkSize; $j++) {
+                $pageIndex = ($i * $chunkSize) + $j + 1;
+                if ($pageIndex > $totalPages) break;
+
+                $pdf->AddPage();
+                $pdf->importPage($pageIndex);
+                $pdf->useTemplate($pdf->importPage($pageIndex));
+            }
+            $splitFile = $outputDir . "split_" . ($i + 1) . ".pdf";
+            $pdf->Output($splitFile, 'F');
+            $splitFiles[] = $splitFile;
+        }
+
+        return $splitFiles;
+    }
     private function processDocument($filePath)
     {
-        // ตั้งค่าข้อมูลโปรเจกต์และไอดี Document Processor
         $projectId = 'summer-sun-442109-m1';
-        $location = 'us'; // เช่น us, eu
+        $location = 'us';
         $processorId = '569840618de6925c';
 
         $client = new DocumentProcessorServiceClient([
@@ -57,19 +95,17 @@ class OCRController extends Controller
 
         $name = $client->processorName($projectId, $location, $processorId);
 
-        // อ่านไฟล์และเตรียมข้อมูลสำหรับ Document AI
         $fileData = file_get_contents($filePath);
-        $tmp = explode('.', basename($filePath)); // ใช้ basename เพื่อเอาชื่อไฟล์อย่างเดียว
-        $fileExtension = strtolower(end($tmp)); // ตรวจสอบนามสกุลไฟล์
-        
+        $fileExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+
         $rawDocument = new RawDocument([
             'content' => $fileData,
-            'mime_type' => $fileExtension === 'pdf' ? 'application/pdf' : 'image/png'
+            'mime_type' => $fileExtension === 'pdf' ? 'application/pdf' : 'image/png',
         ]);
 
         $request = new ProcessRequest([
             'name' => $name,
-            'raw_document' => $rawDocument
+            'raw_document' => $rawDocument,
         ]);
 
         try {
@@ -79,7 +115,6 @@ class OCRController extends Controller
 
             $client->close();
             return $text ?: "ไม่พบข้อความในเอกสาร";
-
         } catch (\Exception $e) {
             return "เกิดข้อผิดพลาด: " . $e->getMessage();
         }

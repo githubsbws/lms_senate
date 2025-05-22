@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // $schedule->command('textfile:import')->dailyAt('04:00');
     }
 
     /**
@@ -24,4 +24,11 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+
+    protected $commands = [
+        \App\Console\Commands\CreateElasticsearchIndex::class,
+        \App\Console\Commands\TextFileImport::class,
+        \App\Console\Commands\DeleteElasticsearchIndex::class,
+    ];
+
 }

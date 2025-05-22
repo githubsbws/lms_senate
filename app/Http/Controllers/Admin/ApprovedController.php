@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\Approve;
 
 
 class ApprovedController extends Controller
@@ -15,8 +15,9 @@ class ApprovedController extends Controller
     public function index()
     {
         if(Auth::check()){
+            $approve = Approve::where('active','y')->get();
 
-            return view('admin.page.report.approved.index');
+            return view('admin.page.report.approved.index',compact('approve'));
         }
         return view('admin.page.auth.login');
     }

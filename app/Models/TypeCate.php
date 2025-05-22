@@ -13,7 +13,7 @@ class TypeCate extends Model
 
     protected $primaryKey = 'id';
     
-    protected $fillable = ['name_type_cate', 'period_id', 'years_id'];
+    protected $fillable = ['name_type_cate', 'active'];
 
     protected static function booted()
     {
@@ -24,13 +24,5 @@ class TypeCate extends Model
         });
     }
 
-    public function years()
-    {
-        return $this->belongsTo(TypeYears::class, 'years_id');
-    }
-
-    public function period()
-    {
-        return $this->belongsTo(TypePeriod::class, 'period_id');
-    }
+    
 }

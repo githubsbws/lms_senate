@@ -35,54 +35,41 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($user as $us)
                                         <tr>
                                             <td class="">
-                                                <p class="mb-0">จักรภัทร์ สวัสดิวงศ์</p>
-                                                <p class="mb-0 text-body-tertiary">Jakkapat@creative-tim.com</p>
+                                                <p class="mb-0">{{ $us->firstname }} {{ $us->lastname }}</p>
+                                                <p class="mb-0 text-body-tertiary">{{ $us->email ?? '-'}}</p>
                                             </td>
                                             <td class="">
-                                                <p class="mb-0">Manager</p>
-                                                <p class="mb-0 text-body-tertiary">Organization</p>
+                                                @switch($us->employee_type)
+                                                    @case(0)
+                                                        <p class="mb-0">ผู้ดูแลระบบ</p>
+                                                        <p class="mb-0 text-body-tertiary">-</p>
+                                                        @break
+                                                    @case(1)
+                                                        <p class="mb-0">สมาชิกวุฒิสภา</p>
+                                                        <p class="mb-0 text-body-tertiary">-</p>
+                                                        @break
+
+                                                    @case(2)
+                                                        <p class="mb-0">บุคคลในวงงานรัฐสภา</p>
+                                                        <p class="mb-0 text-body-tertiary">-</p>
+                                                        @break
+
+                                                    @default
+                                                        <p class="mb-0">หน่วยงาน/บุคคลภายนอก</p>
+                                                        <p class="mb-0 text-body-tertiary">{{ $us->external_detail ?? '-' }}</p>
+                                                @endswitch
                                             </td>
-                                            <td class="">Admin</td>
+                                            <td class="">{{ $us->typeuser->name ?? '-'  }}</td>
                                             <td class="">
-                                                <button type="button" class="btn btn-primary">
+                                                <a type="button" class="btn btn-primary" href="{{ route('admin.permission_edit', $us->id) }}">
                                                     <i class="fa-solid fa-pen"></i>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td class="">
-                                                <p class="mb-0">บงกช สิริประภาชัย</p>
-                                                <p class="mb-0 text-body-tertiary">Bongkoch@creative-tim.com</p>
-                                            </td>
-                                            <td class="">
-                                                <p class="mb-0">Programator</p>
-                                                <p class="mb-0 text-body-tertiary">Developer</p>
-                                            </td>
-                                            <td class="">Super admin</td>
-                                            <td class="">
-                                                <button type="button" class="btn btn-primary">
-                                                    <i class="fa-solid fa-pen"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="">
-                                                <p class="mb-0">ปองภพ อินทรประสิทธิ์</p>
-                                                <p class="mb-0 text-body-tertiary">Pongpob@creative-tim.com</p>
-                                            </td>
-                                            <td class="">
-                                                <p class="mb-0">Executive</p>
-                                                <p class="mb-0 text-body-tertiary">Organization</p>
-                                            </td>
-                                            <td class="">Admin</td>
-                                            <td class="">
-                                                <button type="button" class="btn btn-primary">
-                                                    <i class="fa-solid fa-pen"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -92,13 +79,24 @@
             </main>
         </div>
     </div>
+    @if (session('success_update'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: '{{ session('success_update') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+    @endif
 </body>
 <script>
     $(document).ready(function() {
         $('#userTable').DataTable({
             scrollX: true,
             language: {
-                url: '/council/Admin/includes/languageDataTable.json',
+                url: '/includes/languageDataTable.json',
             }
         });
     });

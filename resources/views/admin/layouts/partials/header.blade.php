@@ -2,7 +2,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <Link rel="stylesheet" href="{{asset('includes/css/style.css')}}">
     <Link rel="stylesheet" href="{{asset('includes/css/layout.css')}}">
 
@@ -35,14 +35,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@5.1.1/css/bootstrap5-toggle.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@5.1.1/js/bootstrap5-toggle.jquery.min.js"></script>
-    <!-- include libraries(jQuery, bootstrap) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    
-
-    <!-- include summernote css/js -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 </head>
 <body>
-   
+
 </body>

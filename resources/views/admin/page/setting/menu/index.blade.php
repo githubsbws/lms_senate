@@ -20,22 +20,22 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">ชื่อ</th>
-                                            <th class="text-center">วันที่อัพเดต</th>
+                                            <th class="text-center">URL</th>
                                             <th class="text-center"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($menu as $mu)
                                         <tr>
-                                            <td class="text-center">Main Menu</td>
-                                            <td class="text-center">25 ก.ย. 2024 / 14:25 น.</td>
+                                            <td class="text-center">{{ $mu->name_submenu}}</td>
+                                            <td class="text-center">{{ $mu->link }}</td>
                                             <td class="text-center">
-                                                <a href="id">
-                                                    <button class="btn">
-                                                        <i class="fa-solid fa-ellipsis"></i>
-                                                    </button>
+                                                <a type="button" class="btn btn-danger" href="{{ route('admin.submenu_del', $mu->id) }}">
+                                                    <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -48,35 +48,49 @@
         <div class="modal fade" id="createMenu" tabindex="-1" aria-labelledby="createMenuLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="createMenuLabel">สร้างเมนู</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">ตั้งค่าหัวข้อ</label>
-                        <input type="text" class="form-control" id="title">
-                    </div>
-                    <div class="">
-                        <label for="url" class="form-label">URL</label>
-                        <input type="text" class="form-control" id="url">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <button type="button" class="btn btn-primary">บันทึก</button>
-                </div>
+                    <form action="{{ route('admin.menu.create') }}" method="POST" id="permissionForm">
+                        @csrf
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="createMenuLabel">สร้างเมนู</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">ตั้งค่าหัวข้อ</label>
+                                <input type="text" class="form-control" id="title" name="title">
+                            </div>
+                            <div class="">
+                                <label for="url" class="form-label">URL</label>
+                                <input type="text" class="form-control" id="url" name="url">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                            <button type="submit" class="btn btn-primary">บันทึก</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    @if (session('success_menu'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: '{{ session('success_menu') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
+    @endif
 </body>
 <script>
     $(document).ready(function() {
         $('#menuListTable').DataTable({
             scrollX: true,
             language: {
-                url: '/council/Admin/includes/languageDataTable.json',
+                url: '/includes/languageDataTable.json',
             }
         });
     });

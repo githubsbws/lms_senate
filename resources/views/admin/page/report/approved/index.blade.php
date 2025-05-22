@@ -22,33 +22,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($approve as $app)
                                         <tr>
-                                            <td class="text-center">1/2567</td>
-                                            <td class="text-center">เขียว ชะอุ่ม</td>
-                                            <td class="">แบบคำขอหนังสือรับรองของที่ปรึกษาผู้ชำนาญการนักวิชาการและเลขานุการประจำคณะกรรมาธิการฯ</td>
-                                            <td class="text-center">11 ต.ค. 2567</td>
+                                            <td class="text-center">{{ $app->number}}</td>
+                                            <td class="text-center">{{ $app->user->firstname }} {{ $app->user->lastname}}</td>
+                                            <td class="">{{ $app->type_detail }}</td>
+                                            <td class="text-center">{{ \Carbon\Carbon::parse($app->the_date)->addYear(543)->format('Y-m-d') }}</td>
                                             <td class="text-center">
-                                                <button class="badge text-bg-success" disabled>อนุมัติ</button>
+                                                @if($app->status == 'success')
+                                                    <button class="btn btn-success badge" disabled>อนุมัติ</button>
+                                                @elseif($app->status == 'deny')
+                                                    <!-- ปุ่มสำหรับสถานะ "ไม่อนุมัติ" -->
+                                                    <button class="btn btn-danger badge" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#viewDetailModal" 
+                                                            data-reason="{{ $app->not_approve_detail }}">
+                                                        ไม่อนุมัติ
+                                                    </button>
+                                                @elseif($app->status == 'waiting')
+                                                    <button class="btn btn-warning badge" disabled>รอรายละเอียด</button>
+                                                @endif
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td class="text-center">2/2567</td>
-                                            <td class="text-center">เขียว ชะอุ่ม</td>
-                                            <td class="">แบบคำขอหนังสือรับรองของที่ปรึกษาผู้ชำนาญการนักวิชาการและเลขานุการประจำคณะกรรมาธิการฯ</td>
-                                            <td class="text-center">11 ต.ค. 2567</td>
-                                            <td class="text-center">
-                                                <button class="badge text-bg-danger" data-bs-toggle="modal" data-bs-target="#viewDetailModal">ไม่อนุมัติ</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">3/2567</td>
-                                            <td class="text-center">เขียว ชะอุ่ม</td>
-                                            <td class="">แบบคำขอหนังสือรับรองของที่ปรึกษาผู้ชำนาญการนักวิชาการและเลขานุการประจำคณะกรรมาธิการฯ</td>
-                                            <td class="text-center">11 ต.ค. 2567</td>
-                                            <td class="text-center">
-                                                <button class="badge text-bg-success" disabled>อนุมัติ</button>
-                                            </td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -62,17 +58,14 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="viewDetailModalLabel">สาเหตุของการไม่อนุมัติคำขอรับบริการ</h1>
+                        <h1 class="modal-title fs-5" id="viewDetailModalLabel">เหตุผลที่ไม่อนุมัติ</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="reason" class="form-label">เหตุผลที่ไม่อนุมัติคำขอรับบริการ</label>
-                            <textarea class="form-control" id="reason" rows="3" disabled></textarea>
-                        </div>
+                        <textarea class="form-control" id="reason" rows="3" disabled></textarea>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                     </div>
                 </div>
             </div>
@@ -84,8 +77,17 @@
         $('#docsList').DataTable({
             scrollX: true,
             language: {
-                url: '/council/Admin/includes/languageDataTable.json',
+                url: '/includes/languageDataTable.json',
             }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewDetailModal = document.getElementById('viewDetailModal');
+        viewDetailModal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            const reason = button.getAttribute('data-reason');
+            viewDetailModal.querySelector('#reason').value = reason || 'ไม่มีเหตุผลที่ระบุไว้';
         });
     });
 </script>

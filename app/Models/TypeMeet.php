@@ -13,7 +13,7 @@ class TypeMeet extends Model
 
     protected $primaryKey = 'id';
     
-    protected $fillable = ['name_type_meet', 'period_id', 'years_id','cate_id'];
+    protected $fillable = ['name_type_meet', 'active'];
 
     public $timestamps = false;
 
@@ -26,18 +26,5 @@ class TypeMeet extends Model
         });
     }
 
-    public function years()
-    {
-        return $this->belongsTo(TypeYears::class, 'years_id');
-    }
-
-    public function period()
-    {
-        return $this->belongsTo(TypePeriod::class, 'period_id');
-    }
-
-    public function cate()
-    {
-        return $this->belongsTo(TypeCate::class, 'cate_id');
-    }
+    
 }

@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('SCOUT_DRIVER', 'meilisearch'),
+    'driver' => env('SCOUT_DRIVER', 'elasticsearch'),
 
     /*
     |--------------------------------------------------------------------------
@@ -130,15 +130,40 @@ return [
     |
     */
 
-    'meilisearch' => [
-        'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
-        'key' => env('MEILISEARCH_KEY'),
-        'index-settings' => [
-            // 'users' => [
-            //     'filterableAttributes'=> ['id', 'name', 'email'],
-            // ],
+    // 'meilisearch' => [
+    //     'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
+    //     'key' => env('MEILISEARCH_KEY'),
+    //     'index-settings' => [
+    //         'text_files' => [  // ใส่ชื่อ index ของคุณ เช่น `text_files`
+    //             'filterableAttributes' => ['active', 'file_id', 'period_id', 'cate_id', 'meet_id', 'years_id'],
+    //             'searchableAttributes' => ['text'], // กำหนดให้ค้นหาเฉพาะฟิลด์ text
+    //             'displayedAttributes' => ['text', 'file', 'period', 'cate', 'meet', 'years', 'active'],
+    //         ],
+    //     ],
+    // ],
+
+    // ----------------------------------------------
+    
+    // 'elasticsearch' => [
+    //     'hosts' => [
+    //         env('ELASTICSEARCH_HOST', 'localhost:9200')
+    //     ],
+    //     'username' => env('ELASTICSEARCH_USER', 'elastic'),
+    //     'password' => env('ELASTICSEARCH_PASS'),
+    //     'scheme' => env('ELASTICSEARCH_SCHEME', 'http'),
+    // ],
+
+        'elasticsearch' => [
+            'driver' => 'elasticsearch',
+            'index' => env('SCOUT_PREFIX', 'scout'),
+            'host' => env('ELASTICSEARCH_HOST', 'http://localhost:9200'),
+            'port' => env('ELASTICSEARCH_PORT'),
+            'scheme' => env('ELASTICSEARCH_SCHEME'),
+            'user' => env('ELASTICSEARCH_USER','elastic'),
+            'pass' => env('ELASTICSEARCH_PASS','53g-YqkfxDM3DYOiWdE8'),
         ],
-    ],
+
+    
 
     /*
     |--------------------------------------------------------------------------

@@ -13,7 +13,7 @@ class TypePeriod extends Model
 
     protected $primaryKey = 'id';
     
-    protected $fillable = ['name_type_period', 'active']; 
+    protected $fillable = ['name_type_period','active']; 
 
     public $timestamps = false;
 
@@ -25,4 +25,6 @@ class TypePeriod extends Model
             $period->active = 'y';
         });
     }
+
+   
 }

@@ -25,10 +25,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($doc as $do)
                                         <tr>
-                                            <td class="">บันทึกการประชุม</td>
+                                            <td class="">{{ $do->name_type_doc }}</td>
                                             <td class="">
-                                                <input type="checkbox" checked data-toggle="toggle" data-onlabel="แสดง" data-offlabel="ไม่แสดง" data-offstyle="danger"/>
+                                                <input 
+                                                    type="checkbox" 
+                                                    {{ $do->status == 'y' ? 'checked' : '' }} 
+                                                    data-toggle="toggle" 
+                                                    data-onlabel="{{ $do->status == 'y' ? 'แสดง' : 'ไม่แสดง' }}" 
+                                                    data-offlabel="ไม่แสดง" 
+                                                    data-offstyle="danger"
+                                                />
                                                 <button class="btn btn-warning">
                                                     <i class="fa-solid fa-pen"></i>
                                                 </button>
@@ -37,6 +45,7 @@
                                                 </button>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -72,7 +81,7 @@
         $('#docsList').DataTable({
             scrollX: true,
             language: {
-                url: '/council/Admin/includes/languageDataTable.json',
+                url: '/includes/languageDataTable.json',
             }
         });
     });
